@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/presentation/bloc/all_plants_bloc.dart';
+import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
 import 'package:sunflower/feature/presentation/bloc/plants_state.dart';
+import 'package:sunflower/feature/presentation/widgets/info_widget.dart';
 import 'package:sunflower/feature/presentation/widgets/plant_line.dart';
+import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
+import 'package:sunflower/feature/presentation/widgets/retry.dart';
 
 class PlantList extends StatelessWidget {
   const PlantList({Key? key}) : super(key: key);
@@ -18,17 +22,15 @@ class PlantList extends StatelessWidget {
       }),
       builder: (context, state) {
         if (state is PlantsEmptyState) {
-          return const SizedBox.shrink();
+          return const InfoText(text: 'Empty list');
         }
         if (state is PlantsFailureState) {
-          return const Center(
-            child: Text('Error loading', style: TextStyle(fontSize: 24)),
-          );
+          return Retry('Error loading', onPressed: () {
+            context.read<AllPlantsBloc>().add(PlantsLoadEvent());
+          });
         }
         if (state is PlantsLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const AppProgress();
         }
         List<PlantEntity> plants = [];
         if (state is PlantsLoadedState) {

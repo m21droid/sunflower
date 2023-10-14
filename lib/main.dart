@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunflower/core/locator.dart';
+import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/usecases/get_all_plants.dart';
 import 'package:sunflower/feature/presentation/bloc/all_plants_bloc.dart';
 import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
@@ -18,15 +19,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-              create: (context) =>
-                  AllPlantsBloc(getAllPlants: locator<GetAllPlants>())
-                    ..add(PlantsLoadEvent())),
-        ],
-        child: MaterialApp(
-            title: 'Sunflower',
-            theme: ThemeData(primarySwatch: Colors.blue),
-            onGenerateRoute: router));
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                AllPlantsBloc(getAllPlants: locator<GetAllPlants>())
+                  ..add(PlantsLoadEvent())),
+      ],
+      child: MaterialApp(
+          title: 'Sunflower',
+          theme: ThemeData(primarySwatch: AppColors.primary),
+          onGenerateRoute: router),
+    );
   }
 }

@@ -11,7 +11,7 @@ class PlantRemoteDataSourceImpl extends PlantRemoteDataSource {
   @override
   Future<Either<ServerException, List<PlantModel>>> getAllPlants() async {
     if (Random().nextBool()) {
-      Future.delayed(const Duration(milliseconds: 3000)); // TODO loading
+      await Future.delayed(const Duration(milliseconds: 2000)); // TODO loading
       final String response =
           await rootBundle.loadString('assets/mock/plants.json');
       final data = json.decode(response) as List;
