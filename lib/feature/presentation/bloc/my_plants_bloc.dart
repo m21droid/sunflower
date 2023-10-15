@@ -27,22 +27,24 @@ class MyPlantsBloc extends Cubit<PlantsState> {
   }
 
   void addPlant(PlantEntity plant) {
-    if (state is PlantsLoadedState) {
-      final plants = (state as PlantsLoadedState).plants;
+    final s = state;
+    if (s is PlantsLoadedState) {
+      final plants = s.plants;
       if (!plants.contains(plant)) {
         plants.add(plant);
         emit(PlantsLoadedState(plants: plants));
       }
     } else {
-      if (state is PlantsEmptyState) {
+      if (s is PlantsEmptyState) {
         emit(PlantsLoadedState(plants: [plant]));
       }
     }
   }
 
   void removePlant(PlantEntity plant) {
-    if (state is PlantsLoadedState) {
-      final plants = (state as PlantsLoadedState).plants;
+    final s = state;
+    if (s is PlantsLoadedState) {
+      final plants = s.plants;
       if (plants.contains(plant)) {
         plants.remove(plant);
         if (plants.isEmpty) {

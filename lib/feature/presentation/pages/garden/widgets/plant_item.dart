@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:sunflower/core/locator.dart';
-import 'package:sunflower/core/pair.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
@@ -57,8 +56,7 @@ class PlantItem extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, PlantPage.routeName,
-              arguments: Pair(_plant, !isExtended));
+          Navigator.pushNamed(context, PlantPage.routeName, arguments: _plant);
         },
         onLongPress: isExtended
             ? () {

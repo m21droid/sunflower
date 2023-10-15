@@ -6,6 +6,7 @@ import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
 import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
+import 'package:sunflower/feature/presentation/bloc/plants_state.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
 import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
@@ -14,23 +15,30 @@ class PlantPage extends StatefulWidget {
   static const routeName = '/plant';
 
   final PlantEntity _plant;
-  final bool isAdd;
 
-  const PlantPage(this._plant, {super.key, this.isAdd = true});
+  const PlantPage(this._plant, {super.key});
 
   @override
   State<PlantPage> createState() => _PlantPageState();
 }
 
 class _PlantPageState extends State<PlantPage> {
-  var _isAdd = false;
+  var isAdd = false;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.isAdd) {
-      _isAdd = true;
+    final state = context.read<MyPlantsBloc>().state;
+    if (state is PlantsLoadedState) {
+      final b = !state.plants.contains(widget._plant);
+      if (b) {
+        isAdd = true;
+      }
+    } else {
+      if (state is PlantsEmptyState) {
+        isAdd = true;
+      }
     }
   }
 
@@ -54,7 +62,7 @@ class _PlantPageState extends State<PlantPage> {
         context.read<MyPlantsBloc>().addPlant(plant);
         context.showToast('Plant ${plant.name} was added successfully');
         setState(() {
-          _isAdd = false;
+          isAdd = false;
         });
       }, onError: (e) {
         context.showToast('Error adding plant ${plant.name}');
@@ -72,24 +80,25 @@ class _PlantPageState extends State<PlantPage> {
                 SliverPersistentHeader(delegate: PlantHeader(plant.imageUrl)),
               ];
             },
-            body: Padding(
+            body: ListView(
               padding: padding,
-              child: Column(
-                children: [
-                  Text(plant.name,
-                      style: const TextStyle(
-                          color: AppColors.primaryText, fontSize: 24)),
-                  space,
-                  const Text('Watering needs',
-                      style: TextStyle(
-                          color: AppColors.secondaryText, fontSize: 18)),
-                  Text('every ${plant.wateringInterval} days',
-                      style: const TextStyle(
-                          color: AppColors.tertiaryText, fontSize: 18)),
-                  space,
-                  _DescriptionText(plant.description),
-                ],
-              ),
+              children: [
+                Text(plant.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: AppColors.primaryText, fontSize: 24)),
+                space,
+                const Text('Watering needs',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppColors.secondaryText, fontSize: 18)),
+                Text('every ${plant.wateringInterval} days',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: AppColors.tertiaryText, fontSize: 18)),
+                space,
+                _DescriptionText(plant.description),
+              ],
             ),
           ),
           SafeArea(
@@ -108,7 +117,7 @@ class _PlantPageState extends State<PlantPage> {
       ),
       floatingActionButton: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: _isAdd
+        child: isAdd
             ? CircleButton(Icons.add,
                 size: 56, color: AppColors.secondary, onTap: onTapAdd)
             : const SizedBox.shrink(),
