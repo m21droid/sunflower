@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
+import 'package:sunflower/feature/presentation/pages/plant/plant_page.dart';
 import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
 
 class PlantItem extends StatelessWidget {
@@ -15,7 +16,7 @@ class PlantItem extends StatelessWidget {
     const radius = Radius.circular(12);
     final image = SvgPicture.asset('assets/images/ic_plant.svg',
         width: 48, height: 48, color: AppColors.secondary);
-    return Column(
+    final item = Column(
       children: [
         ClipRRect(
           borderRadius: const BorderRadius.only(topRight: radius),
@@ -39,6 +40,11 @@ class PlantItem extends StatelessWidget {
         )
       ],
     );
+    return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, PlantPage.routeName, arguments: plant);
+        },
+        child: item);
   }
 }
 

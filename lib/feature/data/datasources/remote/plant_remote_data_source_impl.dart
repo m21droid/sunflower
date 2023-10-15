@@ -10,8 +10,8 @@ import 'package:sunflower/feature/data/datasources/remote/models/plant_model.dar
 class PlantRemoteDataSourceImpl extends PlantRemoteDataSource {
   @override
   Future<Either<ServerException, List<PlantModel>>> getAllPlants() async {
+    await Future.delayed(const Duration(milliseconds: 1000)); // TODO loading
     if (Random().nextBool()) {
-      await Future.delayed(const Duration(milliseconds: 2000)); // TODO loading
       final String response =
           await rootBundle.loadString('assets/mock/plants.json');
       final data = json.decode(response) as List;

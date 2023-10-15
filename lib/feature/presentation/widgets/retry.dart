@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunflower/feature/presentation/widgets/button.dart';
+import 'package:sunflower/feature/presentation/widgets/button_main.dart';
 import 'package:sunflower/feature/presentation/widgets/info_widget.dart';
 
 class Retry extends StatelessWidget {
