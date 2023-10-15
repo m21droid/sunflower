@@ -21,7 +21,7 @@ class Button extends StatelessWidget {
             child: Text(text,
                 style: const TextStyle(fontSize: 20, color: Colors.white)),
           )
-        : GestureDetector(
+        : InkWell(
             onTap: onPressed,
             child: Container(
               height: 36,

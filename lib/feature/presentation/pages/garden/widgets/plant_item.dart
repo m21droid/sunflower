@@ -1,16 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
-import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
-import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
+import 'package:sunflower/feature/presentation/pages/garden/alerts/alert_dialog_widget.dart';
 import 'package:sunflower/feature/presentation/pages/plant/plant_page.dart';
 import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
-import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class PlantItem extends StatelessWidget {
   static const stylePrimary =
@@ -54,19 +50,15 @@ class PlantItem extends StatelessWidget {
       ],
     );
 
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           Navigator.pushNamed(context, PlantPage.routeName, arguments: _plant);
         },
         onLongPress: isExtended
             ? () {
-                locator<DeleteMyPlant>().call(_plant).then((value) {
-                  context.read<MyPlantsBloc>().removePlant(_plant);
-                  context.showToast(
-                      'Plant ${_plant.name} was deleted successfully');
-                }, onError: (e) {
-                  context.showToast('Error deleting plant ${_plant.name}');
-                });
+                showDialog(
+                    context: context,
+                    builder: (context) => DeleteAlertDialog(_plant));
               }
             : null,
         child: item);
