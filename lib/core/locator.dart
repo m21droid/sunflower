@@ -6,7 +6,10 @@ import 'package:sunflower/feature/data/datasources/plant_remote_data_source.dart
 import 'package:sunflower/feature/data/datasources/remote/plant_remote_data_source_impl.dart';
 import 'package:sunflower/feature/data/repositories/plant_repository_impl.dart';
 import 'package:sunflower/feature/domain/repositories/plant_repository.dart';
+import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
 import 'package:sunflower/feature/domain/usecases/get_all_plants.dart';
+import 'package:sunflower/feature/domain/usecases/get_my_plants.dart';
+import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
 
 final locator = GetIt.instance;
 
@@ -20,9 +23,18 @@ Future<void> initializeDependencies() async {
 
   locator.registerSingleton<PlantRemoteDataSource>(PlantRemoteDataSourceImpl());
 
-  locator.registerSingleton<PlantRepository>(
-      PlantRepositoryImpl(locator<PlantRemoteDataSource>()));
+  locator.registerSingleton<PlantRepository>(PlantRepositoryImpl(
+      locator<PlantLocalDataSource>(), locator<PlantRemoteDataSource>()));
 
   locator.registerSingleton<GetAllPlants>(
       GetAllPlants(locator<PlantRepository>()));
+
+  locator
+      .registerSingleton<GetMyPlants>(GetMyPlants(locator<PlantRepository>()));
+
+  locator
+      .registerSingleton<SaveMyPlant>(SaveMyPlant(locator<PlantRepository>()));
+
+  locator.registerSingleton<DeleteMyPlant>(
+      DeleteMyPlant(locator<PlantRepository>()));
 }

@@ -7,7 +7,7 @@ abstract class PlantRepository {
 
   Future<Either<Failure, List<PlantEntity>>> getMyPlants();
 
-  Future<void> saveMyPlants();
+  Future<void> saveMyPlants(PlantEntity plant);
 
-  Future<void> deleteMyPlants();
+  Future<void> deleteMyPlants(PlantEntity plant);
 }

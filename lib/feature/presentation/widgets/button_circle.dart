@@ -5,10 +5,15 @@ class CircleButton extends StatelessWidget {
   final IconData iconData;
   final double size;
   final double sizeIcon;
+  final Color color;
   final GestureTapCallback? onTap;
 
   const CircleButton(this.iconData,
-      {super.key, this.size = 48, this.sizeIcon = 24, this.onTap})
+      {super.key,
+      this.size = 48,
+      this.sizeIcon = 24,
+      this.color = Colors.white,
+      this.onTap})
       : assert(size > sizeIcon);
 
   @override
@@ -18,8 +23,7 @@ class CircleButton extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration:
-            const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         alignment: Alignment.center,
         child: Icon(iconData, size: sizeIcon, color: AppColors.dark),
       ),

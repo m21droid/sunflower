@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sunflower/core/res/colors.dart';
-import 'package:sunflower/feature/presentation/widgets/plant_list.dart';
+import 'package:sunflower/feature/presentation/pages/garden/widgets/all_plants_tab.dart';
+import 'package:sunflower/feature/presentation/pages/garden/widgets/my_plants_tab.dart';
 
 class GardenPage extends StatefulWidget {
   const GardenPage({Key? key}) : super(key: key);
@@ -72,7 +73,12 @@ class _GardenPageState extends State<GardenPage>
         ),
         body: TabBarView(
           controller: _controller,
-          children: const [FlutterLogo(), PlantList()],
+          children: [
+            MyPlantsTab(onRequestData: () {
+              _controller.index = 1;
+            }),
+            const AllPlantsTab()
+          ],
         ),
         backgroundColor: AppColors.background,
       );

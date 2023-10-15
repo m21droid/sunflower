@@ -1,5 +1,3 @@
-import 'package:sunflower/feature/domain/entities/plant_entity.dart';
-
 class PlantModel {
   final String plantId;
   final String name;
@@ -24,15 +22,5 @@ class PlantModel {
         growZoneNumber: json["growZoneNumber"] ?? 0,
         wateringInterval: json["wateringInterval"] ?? 0,
         imageUrl: json["imageUrl"] ?? "");
-  }
-
-  PlantEntity toEntity() {
-    return PlantEntity(
-        plantId: plantId,
-        name: name,
-        description: description,
-        growZoneNumber: growZoneNumber,
-        wateringInterval: wateringInterval,
-        imageUrl: imageUrl);
   }
 }

@@ -1,16 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
+import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
+import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
+import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
 import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
+import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class PlantPage extends StatelessWidget {
   static const routeName = '/plant';
 
-  final PlantEntity plant;
+  final PlantEntity _plant;
+  final bool isAdd;
 
-  const PlantPage(this.plant, {super.key});
+  const PlantPage(this._plant, {super.key, this.isAdd = true});
 
   @override
   Widget build(BuildContext context) {
@@ -33,25 +40,25 @@ class PlantPage extends StatelessWidget {
           NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return <Widget>[
-                SliverPersistentHeader(delegate: PlantHeader(plant.imageUrl)),
+                SliverPersistentHeader(delegate: PlantHeader(_plant.imageUrl)),
               ];
             },
             body: Padding(
               padding: padding,
               child: Column(
                 children: [
-                  Text(plant.name,
+                  Text(_plant.name,
                       style: const TextStyle(
                           color: AppColors.primaryText, fontSize: 24)),
                   space,
                   const Text('Watering needs',
                       style: TextStyle(
                           color: AppColors.secondaryText, fontSize: 18)),
-                  Text('every ${plant.wateringInterval} days',
+                  Text('every ${_plant.wateringInterval} days',
                       style: const TextStyle(
                           color: AppColors.tertiaryText, fontSize: 18)),
                   space,
-                  _DescriptionText(plant.description),
+                  _DescriptionText(_plant.description),
                 ],
               ),
             ),
@@ -70,6 +77,18 @@ class PlantPage extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: isAdd
+          ? CircleButton(Icons.add, size: 56, color: AppColors.secondary,
+              onTap: () {
+              locator<SaveMyPlant>().call(_plant).then((value) {
+                context.read<MyPlantsBloc>().add(PlantsLoadEvent());
+                context
+                    .showToast('Plant ${_plant.name} was added successfully');
+              }, onError: (e) {
+                context.showToast('Error adding plant ${_plant.name}');
+              });
+            })
+          : const SizedBox.shrink(),
     );
   }
 }
