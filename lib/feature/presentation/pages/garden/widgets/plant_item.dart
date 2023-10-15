@@ -9,7 +9,6 @@ import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
 import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
-import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
 import 'package:sunflower/feature/presentation/pages/plant/plant_page.dart';
 import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
@@ -64,7 +63,7 @@ class PlantItem extends StatelessWidget {
         onLongPress: isExtended
             ? () {
                 locator<DeleteMyPlant>().call(_plant).then((value) {
-                  context.read<MyPlantsBloc>().add(PlantsLoadEvent());
+                  context.read<MyPlantsBloc>().removePlant(_plant);
                   context.showToast(
                       'Plant ${_plant.name} was deleted successfully');
                 }, onError: (e) {

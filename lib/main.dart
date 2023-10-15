@@ -8,7 +8,7 @@ import 'package:sunflower/feature/domain/usecases/get_my_plants.dart';
 import 'package:sunflower/feature/presentation/bloc/all_plants_bloc.dart';
 import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
 import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
-import 'package:sunflower/feature/presentation/router.dart';
+import 'package:sunflower/feature/presentation/pages/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
             create: (context) =>
-                MyPlantsBloc(getMyPlants: locator<GetMyPlants>())
-                  ..add(PlantsLoadEvent())),
+                MyPlantsBloc(getMyPlants: locator<GetMyPlants>())..load()),
         BlocProvider(
             create: (context) =>
                 AllPlantsBloc(getAllPlants: locator<GetAllPlants>())

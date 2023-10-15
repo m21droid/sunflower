@@ -6,12 +6,11 @@ import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
 import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
-import 'package:sunflower/feature/presentation/bloc/plants_event.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
 import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
-class PlantPage extends StatelessWidget {
+class PlantPage extends StatefulWidget {
   static const routeName = '/plant';
 
   final PlantEntity _plant;
@@ -20,7 +19,25 @@ class PlantPage extends StatelessWidget {
   const PlantPage(this._plant, {super.key, this.isAdd = true});
 
   @override
+  State<PlantPage> createState() => _PlantPageState();
+}
+
+class _PlantPageState extends State<PlantPage> {
+  var _isAdd = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isAdd) {
+      _isAdd = true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final plant = widget._plant;
+
     onTapBack() {
       Navigator.pop(context);
     }
@@ -32,6 +49,18 @@ class PlantPage extends StatelessWidget {
           subject: 'Plant', sharePositionOrigin: sharePositionOrigin);*/
     }
 
+    onTapAdd() {
+      locator<SaveMyPlant>().call(plant).then((value) {
+        context.read<MyPlantsBloc>().addPlant(plant);
+        context.showToast('Plant ${plant.name} was added successfully');
+        setState(() {
+          _isAdd = false;
+        });
+      }, onError: (e) {
+        context.showToast('Error adding plant ${plant.name}');
+      });
+    }
+
     const padding = EdgeInsets.all(16);
     const space = SizedBox(height: 24);
     return Scaffold(
@@ -40,25 +69,25 @@ class PlantPage extends StatelessWidget {
           NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return <Widget>[
-                SliverPersistentHeader(delegate: PlantHeader(_plant.imageUrl)),
+                SliverPersistentHeader(delegate: PlantHeader(plant.imageUrl)),
               ];
             },
             body: Padding(
               padding: padding,
               child: Column(
                 children: [
-                  Text(_plant.name,
+                  Text(plant.name,
                       style: const TextStyle(
                           color: AppColors.primaryText, fontSize: 24)),
                   space,
                   const Text('Watering needs',
                       style: TextStyle(
                           color: AppColors.secondaryText, fontSize: 18)),
-                  Text('every ${_plant.wateringInterval} days',
+                  Text('every ${plant.wateringInterval} days',
                       style: const TextStyle(
                           color: AppColors.tertiaryText, fontSize: 18)),
                   space,
-                  _DescriptionText(_plant.description),
+                  _DescriptionText(plant.description),
                 ],
               ),
             ),
@@ -77,18 +106,13 @@ class PlantPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: isAdd
-          ? CircleButton(Icons.add, size: 56, color: AppColors.secondary,
-              onTap: () {
-              locator<SaveMyPlant>().call(_plant).then((value) {
-                context.read<MyPlantsBloc>().add(PlantsLoadEvent());
-                context
-                    .showToast('Plant ${_plant.name} was added successfully');
-              }, onError: (e) {
-                context.showToast('Error adding plant ${_plant.name}');
-              });
-            })
-          : const SizedBox.shrink(),
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _isAdd
+            ? CircleButton(Icons.add,
+                size: 56, color: AppColors.secondary, onTap: onTapAdd)
+            : const SizedBox.shrink(),
+      ),
     );
   }
 }
