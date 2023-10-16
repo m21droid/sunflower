@@ -5,12 +5,12 @@ import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/repositories/plant_repository.dart';
 
 class GetMyPlants extends UseCase<void, Either<Failure, List<PlantEntity>>> {
-  final PlantRepository plantRepository;
+  final PlantRepository _plantRepository;
 
-  GetMyPlants(this.plantRepository);
+  GetMyPlants(this._plantRepository);
 
   @override
   Future<Either<Failure, List<PlantEntity>>> call(void input) async {
-    return await plantRepository.getMyPlants();
+    return await _plantRepository.getMyPlants();
   }
 }

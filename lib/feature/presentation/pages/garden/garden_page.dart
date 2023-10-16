@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/feature/domain/usecases/get_sun_times.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/all_plants_tab.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/my_plants_tab.dart';
 
@@ -44,6 +46,15 @@ class _GardenPageState extends State<GardenPage>
               Text('Sunflower', style: TextStyle(fontSize: 24, color: _color)),
           centerTitle: true,
           shadowColor: _unselectedColor,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.sunny, color: AppColors.secondary),
+              tooltip: 'Time of Sunrise and Sunset',
+              onPressed: () {
+                locator<GetSunTimes>().call(null);
+              },
+            ),
+          ],
           bottom: TabBar(
             controller: _controller,
             indicatorColor: _color,
