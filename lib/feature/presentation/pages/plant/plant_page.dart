@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
@@ -10,6 +11,7 @@ import 'package:sunflower/feature/presentation/bloc/plants_state.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
 import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PlantPage extends StatefulWidget {
   static const routeName = '/plant';
@@ -51,10 +53,10 @@ class _PlantPageState extends State<PlantPage> {
     }
 
     onTapShare() {
-      /*final box = context.findRenderObject() as RenderBox?;
+      final box = context.findRenderObject() as RenderBox?;
       final sharePositionOrigin = box!.localToGlobal(Offset.zero) & box.size;
       Share.share(plant.name,
-          subject: 'Plant', sharePositionOrigin: sharePositionOrigin);*/
+          subject: 'Plant', sharePositionOrigin: sharePositionOrigin);
     }
 
     onTapAdd() {
@@ -167,17 +169,12 @@ class _DescriptionText extends StatelessWidget {
                       decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-/*
                       final uri = Uri.parse(link);
                       if (await canLaunchUrl(uri)) {
                         launchUrl(uri);
                       } else {
-                        const toast = AppToast('Browser not found');
-                        const snackBar = SnackBar(
-                            content: toast, backgroundColor: Colors.white);
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        context.showToast('Browser not found');
                       }
-*/
                     }),
               TextSpan(
                   text: description.substring(index + href.length),
