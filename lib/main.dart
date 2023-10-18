@@ -12,21 +12,40 @@ import 'package:sunflower/feature/presentation/pages/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top]);
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent));
   await initializeDependencies();
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint('_MyAppState.didChangeAppLifecycleState: state - $state');
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      _setTransparentBars();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _setTransparentBars();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -42,5 +61,17 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(primarySwatch: AppColors.primary),
           onGenerateRoute: router),
     );
+  }
+
+  // Transparent status and navigation bars
+  void _setTransparentBars() {
+    const systemUiOverlayStyle = SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    );
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 }

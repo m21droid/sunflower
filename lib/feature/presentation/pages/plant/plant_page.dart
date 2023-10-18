@@ -100,6 +100,7 @@ class _PlantPageState extends State<PlantPage> {
                         color: AppColors.tertiaryText, fontSize: 18)),
                 space,
                 _DescriptionText(plant.description),
+                SizedBox(height: MediaQuery.of(context).padding.bottom),
               ],
             ),
           ),
@@ -168,13 +169,12 @@ class _DescriptionText extends StatelessWidget {
                       fontSize: 16,
                       decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
+                    ..onTap = () {
                       final uri = Uri.parse(link);
-                      if (await canLaunchUrl(uri)) {
-                        launchUrl(uri);
-                      } else {
-                        context.showToast('Browser not found');
-                      }
+                      canLaunchUrl(uri).then(
+                        (value) => launchUrl(uri),
+                        onError: (e) => context.showToast('Browser not found'),
+                      );
                     }),
               TextSpan(
                   text: description.substring(index + href.length),

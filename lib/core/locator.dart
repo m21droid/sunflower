@@ -18,6 +18,8 @@ import 'package:sunflower/feature/domain/usecases/get_my_plants.dart';
 import 'package:sunflower/feature/domain/usecases/get_sun_times.dart';
 import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
 
+// Dependency injection
+
 final locator = GetIt.instance;
 
 Future<void> initializeDependencies() async {
