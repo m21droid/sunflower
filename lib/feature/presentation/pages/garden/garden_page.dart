@@ -7,6 +7,8 @@ import 'package:sunflower/feature/presentation/pages/garden/widgets/all_plants_t
 import 'package:sunflower/feature/presentation/pages/garden/widgets/my_plants_tab.dart';
 
 class GardenPage extends StatefulWidget {
+  static const routeName = '/garden';
+
   const GardenPage({Key? key}) : super(key: key);
 
   @override
@@ -15,11 +17,11 @@ class GardenPage extends StatefulWidget {
 
 class _GardenPageState extends State<GardenPage>
     with SingleTickerProviderStateMixin {
-  final _size = 32.0;
+  static const double _size = 32.0;
 
-  final _color = Colors.white;
-  final _selectedColor = AppColors.secondary;
-  final _unselectedColor = AppColors.dark;
+  static const _color = Colors.white;
+  static const _selectedColor = AppColors.secondary;
+  static const _unselectedColor = AppColors.dark;
 
   late TabController _controller;
 
@@ -42,8 +44,8 @@ class _GardenPageState extends State<GardenPage>
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title:
-              Text('Sunflower', style: TextStyle(fontSize: 24, color: _color)),
+          title: const Text('Sunflower',
+              style: TextStyle(fontSize: 24, color: _color)),
           centerTitle: true,
           shadowColor: _unselectedColor,
           actions: [
@@ -61,24 +63,8 @@ class _GardenPageState extends State<GardenPage>
             unselectedLabelColor: _unselectedColor,
             labelColor: _selectedColor,
             tabs: [
-              Tab(
-                text: 'My garden',
-                icon: SvgPicture.asset('assets/images/ic_sunflower.svg',
-                    width: _size,
-                    height: _size,
-                    color: _controller.index == 0
-                        ? _selectedColor
-                        : _unselectedColor),
-              ),
-              Tab(
-                text: 'Plant list',
-                icon: SvgPicture.asset('assets/images/ic_plant.svg',
-                    width: _size,
-                    height: _size,
-                    color: _controller.index == 1
-                        ? _selectedColor
-                        : _unselectedColor),
-              ),
+              _tab(0, 'My garden', 'ic_sunflower'),
+              _tab(1, 'Plant list', 'ic_plant'),
             ],
           ),
         ),
@@ -92,5 +78,18 @@ class _GardenPageState extends State<GardenPage>
           ],
         ),
         backgroundColor: AppColors.background,
+      );
+
+  Tab _tab(int index, String text, String assetName) => Tab(
+        text: text,
+        icon: SvgPicture.asset(
+          'assets/images/$assetName.svg',
+          width: _size,
+          height: _size,
+          colorFilter: ColorFilter.mode(
+            _controller.index == index ? _selectedColor : _unselectedColor,
+            BlendMode.srcIn,
+          ),
+        ),
       );
 }
