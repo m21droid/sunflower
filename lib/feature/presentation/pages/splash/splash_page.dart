@@ -16,8 +16,8 @@ class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   final type = true;
 
-  late final Animation<dynamic> _animation;
   late final AnimationController _controller;
+  late final Animation<dynamic> _animation;
 
   @override
   void initState() {
@@ -45,20 +45,17 @@ class _SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     const size = 96.0;
     final image = SvgPicture.asset('assets/images/ic_splash.svg',
-        width: size,
-        height: size,
-        colorFilter: const ColorFilter.mode(AppColors.dark, BlendMode.srcIn));
+        width: size, height: size, colorFilter: AppColors.darkColorFilter);
     const text = Text("SUNFLOWER",
         style: TextStyle(
             color: AppColors.secondaryText, fontWeight: FontWeight.bold));
 
     return Scaffold(
-      body: Center(
-          child: type
-              ? SplashAnimatedBuilder(
-                  controller: _controller, image: image, text: text)
-              : SplashAnimatedWidget(
-                  listenable: _animation, image: image, text: text)),
+      body: type
+          ? SplashAnimatedBuilder(
+              controller: _controller, image: image, text: text)
+          : SplashAnimatedWidget(
+              listenable: _animation, image: image, text: text),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             _controller.reset();

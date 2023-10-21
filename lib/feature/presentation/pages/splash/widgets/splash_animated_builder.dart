@@ -53,7 +53,7 @@ class SplashAnimatedBuilder extends StatelessWidget {
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.002)
               ..rotateY(pi * (transformAnimation.value)),
-            child: SlideTransition(position: slideAnimation, child: this.image),
+            child: SlideTransition(position: slideAnimation, child: image),
           ),
         ),
         Row(

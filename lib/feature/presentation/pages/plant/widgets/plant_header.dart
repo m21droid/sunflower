@@ -12,10 +12,11 @@ class PlantHeader extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     final placeholder = Container(
-        color: AppColors.dark,
-        alignment: Alignment.center,
-        child: SvgPicture.asset('assets/images/ic_plant.svg',
-            width: 96, height: 96, color: AppColors.secondary));
+      color: AppColors.dark,
+      alignment: Alignment.center,
+      child: SvgPicture.asset('assets/images/ic_plant.svg',
+          width: 96, height: 96, colorFilter: AppColors.secondaryColorFilter),
+    );
     return CachedNetworkImage(
       imageUrl: url,
       fit: BoxFit.cover,

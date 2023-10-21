@@ -24,8 +24,9 @@ class PlantItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const radius = Radius.circular(12);
+    const size = 48.0;
     final image = SvgPicture.asset('assets/images/ic_plant.svg',
-        width: 48, height: 48, color: AppColors.secondary);
+        width: size, height: size, colorFilter: AppColors.secondaryColorFilter);
     const boxDecoration = BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(bottomLeft: radius));

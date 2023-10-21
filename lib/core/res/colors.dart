@@ -27,4 +27,9 @@ abstract class AppColors {
   static const Color primaryText = Color(0xFF000000);
   static const Color secondaryText = Color(0xFF005D2B);
   static const Color tertiaryText = Color(0xFF888888);
+
+  static const ColorFilter secondaryColorFilter =
+      ColorFilter.mode(secondary, BlendMode.srcIn);
+  static const ColorFilter darkColorFilter =
+      ColorFilter.mode(dark, BlendMode.srcIn);
 }
