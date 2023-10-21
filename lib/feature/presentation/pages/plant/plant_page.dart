@@ -1,17 +1,13 @@
-import 'package:flutter/gestures.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
-import 'package:sunflower/feature/domain/usecases/save_my_plant.dart';
-import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
-import 'package:sunflower/feature/presentation/bloc/plants_state.dart';
+import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_add_button_widget.dart';
+import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_description_widget.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
 import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
-import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PlantPage extends StatefulWidget {
   static const routeName = '/plant';
@@ -25,23 +21,24 @@ class PlantPage extends StatefulWidget {
 }
 
 class _PlantPageState extends State<PlantPage> {
-  var isAdd = false;
+  static const _heightHeader = 240.0;
+  static const _sizeAdd = 64.0;
+  static const _marginAdd = _heightHeader - _sizeAdd / 2;
+  static const _offsetAdd = _marginAdd / 2;
+
+  late ScrollController _controller;
+  var _offsetScroll = _marginAdd;
 
   @override
   void initState() {
     super.initState();
 
-    final state = context.read<MyPlantsBloc>().state;
-    if (state is PlantsLoadedState) {
-      final b = !state.plants.contains(widget._plant);
-      if (b) {
-        isAdd = true;
-      }
-    } else {
-      if (state is PlantsEmptyState) {
-        isAdd = true;
-      }
-    }
+    _controller = ScrollController()
+      ..addListener(() {
+        setState(() {
+          _offsetScroll = _marginAdd - _controller.offset;
+        });
+      });
   }
 
   @override
@@ -59,29 +56,20 @@ class _PlantPageState extends State<PlantPage> {
           subject: 'Plant', sharePositionOrigin: sharePositionOrigin);
     }
 
-    onTapAdd() {
-      locator<SaveMyPlant>().call(plant).then((value) {
-        context.read<MyPlantsBloc>().addPlant(plant);
-        context.showToast('Plant ${plant.name} was added successfully');
-        setState(() {
-          isAdd = false;
-        });
-      }, onError: (e) {
-        context.showToast('Error adding plant ${plant.name}');
-      });
-    }
-
     const padding = EdgeInsets.all(16);
     const space = SizedBox(height: 24);
     return Scaffold(
       body: Stack(
+        alignment: Alignment.topRight,
         children: [
           NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return <Widget>[
-                SliverPersistentHeader(delegate: PlantHeader(plant.imageUrl)),
-              ];
-            },
+            controller: _controller,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverPersistentHeader(
+                delegate:
+                    PlantHeader(maxHeight: _heightHeader, url: plant.imageUrl),
+              ),
+            ],
             body: ListView(
               padding: padding,
               children: [
@@ -99,9 +87,18 @@ class _PlantPageState extends State<PlantPage> {
                     style: const TextStyle(
                         color: AppColors.tertiaryText, fontSize: 18)),
                 space,
-                _DescriptionText(plant.description),
+                PlantDescription(plant.description),
                 SizedBox(height: MediaQuery.of(context).padding.bottom),
               ],
+            ),
+          ),
+          Container(
+            width: _sizeAdd,
+            height: _sizeAdd,
+            margin: EdgeInsets.only(top: max(0, _offsetScroll), right: 16),
+            child: Opacity(
+              opacity: max(0, min(_offsetScroll, _offsetAdd)) / _offsetAdd,
+              child: PlantAddButton(plant: plant, size: _sizeAdd),
             ),
           ),
           SafeArea(
@@ -118,72 +115,6 @@ class _PlantPageState extends State<PlantPage> {
           ),
         ],
       ),
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: isAdd
-            ? CircleButton(Icons.add,
-                size: 56, color: AppColors.secondary, onTap: onTapAdd)
-            : const SizedBox.shrink(),
-      ),
     );
-  }
-}
-
-class _DescriptionText extends StatelessWidget {
-  final String _text;
-
-  const _DescriptionText(this._text);
-
-  @override
-  Widget build(BuildContext context) {
-    const style = TextStyle(color: AppColors.primaryText, fontSize: 16);
-
-    var description = _text.replaceAll('<br>', '\n');
-    final href = RegExp('<a href.*a>').firstMatch(description)?.group(0);
-
-    if (href != null) {
-      debugPrint('DescriptionText.build: href - $href');
-      final link =
-          RegExp('".*"').firstMatch(href)?.group(0)?.replaceAll('"', '');
-      debugPrint('DescriptionText.build: link - $link');
-      final text = RegExp('>.*<')
-          .firstMatch(href)
-          ?.group(0)
-          ?.replaceAll('>', '')
-          .replaceAll('<', '');
-      debugPrint('DescriptionText.build: text - $text');
-
-      if (link != null && link.isNotEmpty && text != null && text.isNotEmpty) {
-        final index = description.indexOf(href);
-        debugPrint('DescriptionText.build: index - $index');
-
-        return RichText(
-          text: TextSpan(
-            style: style,
-            children: [
-              TextSpan(text: description.substring(0, index), style: style),
-              TextSpan(
-                  text: text,
-                  style: const TextStyle(
-                      color: AppColors.secondaryText,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      final uri = Uri.parse(link);
-                      canLaunchUrl(uri).then(
-                        (value) => launchUrl(uri),
-                        onError: (e) => context.showToast('Browser not found'),
-                      );
-                    }),
-              TextSpan(
-                  text: description.substring(index + href.length),
-                  style: style),
-            ],
-          ),
-        );
-      }
-    }
-    return Text(description, style: style);
   }
 }

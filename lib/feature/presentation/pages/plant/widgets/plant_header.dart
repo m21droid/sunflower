@@ -4,9 +4,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sunflower/core/res/colors.dart';
 
 class PlantHeader extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final double sizePlaceholder;
   final String url;
 
-  PlantHeader(this.url);
+  PlantHeader(
+      {this.minHeight = 0,
+      this.maxHeight = 240,
+      this.sizePlaceholder = 96,
+      this.url = ""})
+      : assert(maxHeight > sizePlaceholder);
 
   @override
   Widget build(
@@ -15,7 +23,9 @@ class PlantHeader extends SliverPersistentHeaderDelegate {
       color: AppColors.dark,
       alignment: Alignment.center,
       child: SvgPicture.asset('assets/images/ic_plant.svg',
-          width: 96, height: 96, colorFilter: AppColors.secondaryColorFilter),
+          width: sizePlaceholder,
+          height: sizePlaceholder,
+          colorFilter: AppColors.secondaryColorFilter),
     );
     return CachedNetworkImage(
       imageUrl: url,
@@ -26,10 +36,10 @@ class PlantHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 240;
+  double get maxExtent => maxHeight;
 
   @override
-  double get minExtent => 0;
+  double get minExtent => minHeight;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
