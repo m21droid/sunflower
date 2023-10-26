@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sunflower/core/res/colors.dart';
-import 'package:sunflower/feature/presentation/pages/anim/widget/night_animated_widget.dart';
-import 'package:sunflower/feature/presentation/pages/anim/widget/sun_animated_widget.dart';
+import 'package:sunflower/feature/presentation/pages/sun/widget/night_animated_widget.dart';
+import 'package:sunflower/feature/presentation/pages/sun/widget/sun_animated_widget.dart';
+import 'package:sunflower/feature/presentation/widgets/floating_action_button.dart';
 
 class SunPage extends StatefulWidget {
   static const routeName = '/sun';
@@ -45,20 +46,20 @@ class _SunPageState extends State<SunPage> with SingleTickerProviderStateMixin {
           NightAnimatedWidget(listenable: _animation),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_controller.isAnimating) {
-            _controller.stop();
-          } else {
-            _controller.repeat();
-          }
-          setState(() {});
-        },
-        child: Icon(_controller.isAnimating ? Icons.stop : Icons.play_arrow,
-            color: AppColors.dark),
-      ),
+      floatingActionButton: AppFloatingActionButton(
+          _controller.isAnimating ? Icons.stop : Icons.play_arrow,
+          onPressed: _pauseAnim),
       backgroundColor: AppColors.background,
     );
+  }
+
+  _pauseAnim() {
+    if (_controller.isAnimating) {
+      _controller.stop();
+    } else {
+      _controller.repeat();
+    }
+    setState(() {});
   }
 
   @override

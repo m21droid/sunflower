@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sunflower/core/res/colors.dart';
 
-class CircleButton extends StatelessWidget {
+class AppCircleButton extends StatelessWidget {
   final IconData iconData;
   final double size;
   final double sizeIcon;
   final Color color;
   final GestureTapCallback? onTap;
 
-  const CircleButton(this.iconData,
+  const AppCircleButton(this.iconData,
       {super.key,
       this.size = 48,
       this.sizeIcon = 24,

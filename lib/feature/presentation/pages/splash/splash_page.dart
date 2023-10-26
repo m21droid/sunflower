@@ -4,6 +4,7 @@ import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/presentation/pages/garden/garden_page.dart';
 import 'package:sunflower/feature/presentation/pages/splash/widgets/splash_animated_builder.dart';
 import 'package:sunflower/feature/presentation/pages/splash/widgets/splash_animated_widget.dart';
+import 'package:sunflower/feature/presentation/widgets/floating_action_button.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -56,14 +57,15 @@ class _SplashPageState extends State<SplashPage>
               controller: _controller, image: image, text: text)
           : SplashAnimatedWidget(
               listenable: _animation, image: image, text: text),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _controller.reset();
-            _controller.forward();
-          },
-          child: const Icon(Icons.play_arrow, color: AppColors.dark)),
+      floatingActionButton:
+          AppFloatingActionButton(Icons.play_arrow, onPressed: _restartAnim),
       backgroundColor: AppColors.background,
     );
+  }
+
+  _restartAnim() {
+    _controller.reset();
+    _controller.forward();
   }
 
   @override

@@ -4,7 +4,7 @@ import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
-import 'package:sunflower/feature/presentation/bloc/my_plants_bloc.dart';
+import 'package:sunflower/feature/presentation/pages/garden/bloc/my_plants_bloc.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class DeleteAlertDialog extends StatelessWidget {

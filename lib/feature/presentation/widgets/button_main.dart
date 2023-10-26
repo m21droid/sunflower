@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sunflower/core/res/colors.dart';
 
-class Button extends StatelessWidget {
+class AppButton extends StatelessWidget {
   static const bool type = false;
 
   final String text;
   final VoidCallback? onPressed;
 
-  const Button(this.text, {Key? key, this.onPressed}) : super(key: key);
+  const AppButton(this.text, {Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

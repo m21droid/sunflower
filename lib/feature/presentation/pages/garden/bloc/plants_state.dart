@@ -1,6 +1,6 @@
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 
-abstract class PlantsState {}
+sealed class PlantsState {}
 
 class PlantsLoadingState extends PlantsState {}
 

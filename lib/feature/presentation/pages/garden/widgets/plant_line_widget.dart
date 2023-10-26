@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
-import 'package:sunflower/feature/presentation/pages/garden/widgets/plant_item.dart';
+import 'package:sunflower/feature/presentation/pages/garden/widgets/plant_item_widget.dart';
 
 class PlantLine extends StatelessWidget {
   final PlantEntity plant1;

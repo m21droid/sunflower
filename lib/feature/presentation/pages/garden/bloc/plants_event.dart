@@ -1,4 +1,4 @@
-abstract class PlantsEvent {}
+sealed class PlantsEvent {}
 
 class PlantsLoadEvent extends PlantsEvent {}
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class InfoText extends StatelessWidget {
+class AppInfoText extends StatelessWidget {
   final String text;
 
-  const InfoText({super.key, required this.text});
+  const AppInfoText({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

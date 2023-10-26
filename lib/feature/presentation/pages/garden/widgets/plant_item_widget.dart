@@ -90,7 +90,8 @@ class _PlantBottomItem extends StatelessWidget {
       height: 48,
       decoration: boxDecoration,
       alignment: Alignment.center,
-      child: Text(_plant.name, style: PlantItem.stylePrimary),
+      child: Text(_plant.name,
+          textAlign: TextAlign.center, style: PlantItem.stylePrimary),
     );
   }
 }

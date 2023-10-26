@@ -107,8 +107,8 @@ class _PlantPageState extends State<PlantPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleButton(Icons.arrow_back, onTap: onTapBack),
-                  CircleButton(Icons.share, onTap: onTapShare)
+                  AppCircleButton(Icons.arrow_back, onTap: onTapBack),
+                  AppCircleButton(Icons.share, onTap: onTapShare)
                 ],
               ),
             ),

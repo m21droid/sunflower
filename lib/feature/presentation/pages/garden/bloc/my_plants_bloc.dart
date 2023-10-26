@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/get_my_plants.dart';
-import 'package:sunflower/feature/presentation/bloc/plants_state.dart';
+import 'package:sunflower/feature/presentation/pages/garden/bloc/plants_state.dart';
 
 class MyPlantsBloc extends Cubit<PlantsState> {
   final GetMyPlants getMyPlants;
