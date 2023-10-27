@@ -6,7 +6,7 @@ import 'package:sunflower/feature/presentation/pages/garden/bloc/plants_state.da
 import 'package:sunflower/feature/presentation/pages/garden/widgets/plant_list_widget.dart';
 import 'package:sunflower/feature/presentation/widgets/info_widget.dart';
 import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
-import 'package:sunflower/feature/presentation/widgets/retry.dart';
+import 'package:sunflower/feature/presentation/widgets/retry_widget.dart';
 
 class MyPlantsTab extends StatelessWidget {
   final VoidCallback? onRequestData;

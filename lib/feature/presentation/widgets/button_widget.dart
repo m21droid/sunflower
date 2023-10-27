@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/core/temp.dart';
 
 class AppButton extends StatelessWidget {
   static const bool type = false;
@@ -11,7 +12,6 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const radius = Radius.circular(12);
     return type
         ? ElevatedButton(
             onPressed: onPressed,
@@ -27,9 +27,7 @@ class AppButton extends StatelessWidget {
               height: 36,
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               decoration: const BoxDecoration(
-                  color: AppColors.button,
-                  borderRadius:
-                      BorderRadius.only(topRight: radius, bottomLeft: radius)),
+                  color: AppColors.button, borderRadius: borderRadius),
               constraints: const BoxConstraints(minWidth: 120),
               child: Text(text,
                   textAlign: TextAlign.center,

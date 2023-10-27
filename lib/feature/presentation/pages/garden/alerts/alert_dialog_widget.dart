@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunflower/core/locator.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/domain/usecases/delete_my_plant.dart';
 import 'package:sunflower/feature/presentation/pages/garden/bloc/my_plants_bloc.dart';
@@ -14,14 +15,11 @@ class DeleteAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const radius = Radius.circular(12);
     const style = TextStyle(color: AppColors.secondaryText);
     final name = _plant.name;
     return AlertDialog(
       backgroundColor: AppColors.button,
-      shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.only(topRight: radius, bottomLeft: radius)),
+      shape: const RoundedRectangleBorder(borderRadius: borderRadius),
       title: const Text("Attention!"),
       content: Text(
           "You are trying to delete plant $name from your garden. Are you sure?"),

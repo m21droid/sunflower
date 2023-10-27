@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sunflower/core/ext/latlng_ext.dart';
-import 'package:sunflower/feature/presentation/widgets/animated_switcher_widget.dart';
-import 'package:sunflower/feature/presentation/widgets/floating_action_button.dart';
+import 'package:sunflower/feature/presentation/pages/map/widgets/animated_floating_action_button_widget.dart';
+import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class MapPage extends StatefulWidget {
   static const routeName = '/map';
@@ -21,8 +21,7 @@ class MapPageState extends State<MapPage> {
   final _markers = <Marker>{};
 
   var _myPosition = const CameraPosition(target: LatLng(0, 0), zoom: 0);
-  var _isVisibleDate = false;
-  var _isVisibleLocation = false;
+  var _date = DateTime.now();
 
   @override
   void initState() {
@@ -45,28 +44,13 @@ class MapPageState extends State<MapPage> {
         onMapCreated: _onCreatedGoogleMap,
         onTap: _onTapGoogleMap,
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          AppAnimatedSwitcher(
-            isVisible: _isVisibleDate,
-            child: AppFloatingActionButton(Icons.calendar_month,
-                onPressed: _onTapDate),
-          ),
-          AppAnimatedSwitcher(
-            isVisible: _isVisibleLocation,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: AppFloatingActionButton(Icons.my_location,
-                  onPressed: _goToMyLocation),
-            ),
-          ),
-        ],
+      floatingActionButton: AppAnimatedFloatingActionButton(
+        date: _date,
+        onPressedDate: () => _onPressedDate(context),
+        onPressedLocation: _onPressedLocation,
       ),
     );
   }
-
-  _onTapDate() async {}
 
   _onCreatedGoogleMap(controller) {
     _controller.complete(controller);
@@ -120,24 +104,47 @@ class MapPageState extends State<MapPage> {
         LatLng location = LatLng(position.latitude, position.longitude);
         _myPosition = CameraPosition(target: location, zoom: 10.0);
         _goToMyLocation();
-
-        setState(() {
-          _isVisibleDate = true;
-          _isVisibleLocation = true;
-        });
         break;
       case LocationPermission.denied:
       case LocationPermission.deniedForever:
       case LocationPermission.unableToDetermine:
-        setState(() {
-          _isVisibleDate = true;
-          _isVisibleLocation = false;
-        });
     }
   }
 
   _goToMyLocation() async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(_myPosition));
+  }
+
+  _onPressedDate(BuildContext context) async {
+    final year = DateTime.now().year;
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(year - 10),
+      lastDate: DateTime(year + 10),
+    );
+    if (date != null && date != _date) {
+      setState(() {
+        _date = date;
+      });
+    }
+  }
+
+  _onPressedLocation() {
+    Geolocator.checkPermission().then((value) {
+      debugPrint('MapPage.onPressedLocation: permission - $value');
+
+      switch (value) {
+        case LocationPermission.always:
+        case LocationPermission.whileInUse:
+          _goToMyLocation();
+          break;
+        case LocationPermission.denied:
+        case LocationPermission.deniedForever:
+        case LocationPermission.unableToDetermine:
+          context.showToast('Device geolocation is disabled for all apps.');
+      }
+    });
   }
 }

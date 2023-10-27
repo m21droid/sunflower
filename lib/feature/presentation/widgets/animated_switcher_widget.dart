@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunflower/core/temp.dart';
 
 class AppAnimatedSwitcher extends StatelessWidget {
   final Widget child;
@@ -10,7 +11,7 @@ class AppAnimatedSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 600),
+      duration: animDuration,
       child: isVisible
           ? child
           : const SizedBox.shrink(key: Key('AppAnimatedSwitcher')),

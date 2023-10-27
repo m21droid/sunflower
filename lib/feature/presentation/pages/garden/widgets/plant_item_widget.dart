@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/presentation/pages/garden/alerts/alert_dialog_widget.dart';
 import 'package:sunflower/feature/presentation/pages/plant/plant_page.dart';
@@ -23,7 +24,6 @@ class PlantItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const radius = Radius.circular(12);
     const size = 48.0;
     final image = SvgPicture.asset('assets/images/ic_plant.svg',
         width: size, height: size, colorFilter: AppColors.secondaryColorFilter);

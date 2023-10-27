@@ -7,7 +7,7 @@ import 'package:sunflower/feature/domain/entities/plant_entity.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_add_button_widget.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_description_widget.dart';
 import 'package:sunflower/feature/presentation/pages/plant/widgets/plant_header.dart';
-import 'package:sunflower/feature/presentation/widgets/button_circle.dart';
+import 'package:sunflower/feature/presentation/widgets/circle_button_widget.dart';
 
 class PlantPage extends StatefulWidget {
   static const routeName = '/plant';

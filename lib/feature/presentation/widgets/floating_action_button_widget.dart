@@ -9,10 +9,9 @@ class AppFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('AppFloatingActionButton >>>>>>>> $_icon');
     return FloatingActionButton(
         heroTag: _icon.hashCode,
         onPressed: onPressed,
-        child: Icon(_icon, color: AppColors.dark));
+        child: Icon(_icon, color: AppColors.fab));
   }
 }

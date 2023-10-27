@@ -4,7 +4,7 @@ import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/presentation/pages/garden/garden_page.dart';
 import 'package:sunflower/feature/presentation/pages/splash/widgets/splash_animated_builder.dart';
 import 'package:sunflower/feature/presentation/pages/splash/widgets/splash_animated_widget.dart';
-import 'package:sunflower/feature/presentation/widgets/floating_action_button.dart';
+import 'package:sunflower/feature/presentation/widgets/floating_action_button_widget.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
