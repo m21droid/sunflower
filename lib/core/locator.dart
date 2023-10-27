@@ -7,6 +7,7 @@ import 'package:sunflower/feature/data/datasources/plant_local_data_source.dart'
 import 'package:sunflower/feature/data/datasources/plant_remote_data_source.dart';
 import 'package:sunflower/feature/data/datasources/remote/plant_remote_data_source_impl.dart';
 import 'package:sunflower/feature/data/datasources/weather/weather_data_source_impl.dart';
+import 'package:sunflower/feature/data/datasources/weather/weather_rest_client.dart';
 import 'package:sunflower/feature/data/datasources/weather_data_source.dart';
 import 'package:sunflower/feature/data/repositories/plant_repository_impl.dart';
 import 'package:sunflower/feature/data/repositories/weather_repository_impl.dart';
@@ -55,8 +56,10 @@ Future<void> initializeDependencies() async {
   dio.interceptors.add(AwesomeDioInterceptor());
   locator.registerSingleton<Dio>(dio);
 
+  locator.registerSingleton<WeatherRestClient>(WeatherRestClient(dio));
+
   locator.registerSingleton<WeatherDataSource>(
-      WeatherDataSourceImpl(locator<Dio>()));
+      WeatherDataSourceImpl(locator<WeatherRestClient>()));
 
   locator.registerSingleton<WeatherRepository>(
       WeatherRepositoryImpl(locator<WeatherDataSource>()));

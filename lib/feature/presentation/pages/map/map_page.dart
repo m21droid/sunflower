@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sunflower/core/ext/latlng_ext.dart';
+import 'package:sunflower/core/ext/pair.dart';
 import 'package:sunflower/feature/presentation/pages/map/widgets/animated_floating_action_button_widget.dart';
+import 'package:sunflower/feature/presentation/pages/sun/sun_page.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class MapPage extends StatefulWidget {
@@ -82,14 +84,17 @@ class MapPageState extends State<MapPage> {
       infoWindow: InfoWindow(
           title: 'Observation point',
           snippet: latLng.info(),
-          onTap: _onTapInfoWindow(latLng)),
+          onTap: () => _onTapInfoWindow(latLng)),
     );
     _markers.add(marker);
     setState(() {});
   }
 
   _onTapInfoWindow(LatLng latLng) {
-    //locator<GetSunTimes>().call(latLng);
+    debugPrint('MapPage.onTapInfoWindow: latLng - $latLng');
+
+    Navigator.pushNamed(context, SunPage.routeName,
+        arguments: Pair(latLng, _date));
   }
 
   _getMyLocation() async {

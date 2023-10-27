@@ -1,25 +1,34 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sunflower/feature/data/datasources/weather/models/sun_response_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:sunflower/core/error/exception.dart';
+import 'package:sunflower/feature/data/datasources/weather/models/sun_response_status.dart';
+import 'package:sunflower/feature/data/datasources/weather/models/sun_times_model.dart';
+import 'package:sunflower/feature/data/datasources/weather/weather_rest_client.dart';
 import 'package:sunflower/feature/data/datasources/weather_data_source.dart';
 
 class WeatherDataSourceImpl extends WeatherDataSource {
-  final Dio _dio;
+  final WeatherRestClient _client;
 
-  WeatherDataSourceImpl(this._dio);
+  WeatherDataSourceImpl(this._client);
 
   @override
-  Future<void> getSunTimes() async {
-    final response = await _dio.get(
-        'https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400');
-    debugPrint('WeatherDataSourceImpl.getSunTimes: response - $response');
-    final statusCode = response.statusCode;
-    debugPrint('WeatherDataSourceImpl.getSunTimes: statusCode - $statusCode');
-    final data = response.data;
-    debugPrint('WeatherDataSourceImpl.getSunTimes: data - $data');
-    if (response.statusCode == 200) {
-      final sun = SunResponseModel.fromJson(data);
-      debugPrint('WeatherDataSourceImpl.getSunTimes: sun - $sun');
+  Future<Either<ServerException, SunTimesModel>> getSunTimes(
+      LatLng latLng, DateTime date) async {
+    final sunResponse = await _client
+        .getSunTimes(latLng.latitude, latLng.longitude,
+            DateFormat('yyyy-MM-dd').format(date))
+        .catchError((e) {
+      // TODO return left(ServerException());
+    });
+    debugPrint('WeatherDataSourceImpl.getSunTimes: sunResponse - $sunResponse');
+    switch (sunResponse.status) {
+      case SunResponseStatus.ok:
+        final sunTimes = sunResponse.results;
+        return (sunTimes == null) ? left(ServerException()) : right(sunTimes);
+      default:
+        return left(ServerException());
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sunflower/core/res/colors.dart';
 import 'package:sunflower/feature/presentation/pages/sun/widget/night_animated_widget.dart';
 import 'package:sunflower/feature/presentation/pages/sun/widget/sun_animated_widget.dart';
+import 'package:sunflower/feature/presentation/pages/sun/widget/sun_info_widget.dart';
 import 'package:sunflower/feature/presentation/widgets/floating_action_button_widget.dart';
 
 class SunPage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SunPageState extends State<SunPage> with SingleTickerProviderStateMixin {
     _controller =
         AnimationController(duration: const Duration(seconds: 24), vsync: this)
           ..addStatusListener((status) {
-            debugPrint('_SunPageState.listener: status - $status');
+            debugPrint('SunPage.listener: status - $status');
           });
     _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
     _controller.repeat();
@@ -39,7 +40,7 @@ class _SunPageState extends State<SunPage> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox.shrink(),
-              const Text('TEST'),
+              const SunInfo(),
               SunAnimatedWidget(listenable: _animation),
             ],
           ),

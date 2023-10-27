@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sunflower/core/res/colors.dart';
-import 'package:sunflower/feature/presentation/pages/anim/sun_page.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/all_plants_tab.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/my_plants_tab.dart';
+import 'package:sunflower/feature/presentation/pages/map/map_page.dart';
+import 'package:sunflower/feature/presentation/widgets/floating_action_button_widget.dart';
 
 class GardenPage extends StatefulWidget {
   static const routeName = '/garden';
@@ -49,7 +50,7 @@ class _GardenPageState extends State<GardenPage>
             icon: const Icon(Icons.sunny, color: AppColors.secondary),
             tooltip: 'Time of Sunrise and Sunset',
             onPressed: () {
-              Navigator.pushNamed(context, SunPage.routeName);
+              Navigator.pushNamed(context, MapPage.routeName);
             },
           ),
         ],
@@ -72,6 +73,12 @@ class _GardenPageState extends State<GardenPage>
           }),
           const AllPlantsTab(),
         ],
+      ),
+      floatingActionButton: AppFloatingActionButton(
+        Icons.sunny,
+        onPressed: () {
+          Navigator.pushNamed(context, MapPage.routeName);
+        },
       ),
       backgroundColor: AppColors.background,
     );
