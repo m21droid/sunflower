@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -16,19 +17,21 @@ class WeatherDataSourceImpl extends WeatherDataSource {
   @override
   Future<Either<ServerException, SunTimesModel>> getSunTimes(
       LatLng latLng, DateTime date) async {
-    final sunResponse = await _client
-        .getSunTimes(latLng.latitude, latLng.longitude,
-            DateFormat('yyyy-MM-dd').format(date))
-        .catchError((e) {
-      // TODO return left(ServerException());
-    });
-    debugPrint('WeatherDataSourceImpl.getSunTimes: sunResponse - $sunResponse');
-    switch (sunResponse.status) {
-      case SunResponseStatus.ok:
-        final sunTimes = sunResponse.results;
-        return (sunTimes == null) ? left(ServerException()) : right(sunTimes);
-      default:
-        return left(ServerException());
+    try {
+      final sunResponse = await _client.getSunTimes(latLng.latitude,
+          latLng.longitude, DateFormat('yyyy-MM-dd').format(date), 0);
+      debugPrint(
+          'WeatherDataSourceImpl.getSunTimes: sunResponse - $sunResponse');
+      switch (sunResponse.status) {
+        case SunResponseStatus.ok:
+          final sunTimes = sunResponse.results;
+          if (sunTimes != null) {
+            return right(sunTimes);
+          }
+      }
+    } on Exception catch (e) {
+      debugPrint('WeatherDataSourceImpl.getSunTimes: error - $e');
     }
+    return left(ServerException());
   }
 }

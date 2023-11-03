@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sunflower/core/ext/latlng_ext.dart';
 import 'package:sunflower/core/ext/pair.dart';
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/presentation/pages/map/widgets/animated_floating_action_button_widget.dart';
 import 'package:sunflower/feature/presentation/pages/sun/sun_page.dart';
 import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
@@ -22,7 +23,7 @@ class MapPageState extends State<MapPage> {
   final _controller = Completer<GoogleMapController>();
   final _markers = <Marker>{};
 
-  var _myPosition = const CameraPosition(target: LatLng(0, 0), zoom: 0);
+  var _myPosition = const CameraPosition(target: latLng, zoom: 0);
   var _date = DateTime.now();
 
   @override
@@ -55,6 +56,8 @@ class MapPageState extends State<MapPage> {
   }
 
   _onCreatedGoogleMap(controller) {
+    debugPrint('MapPage.onCreatedGoogleMap: ');
+
     _controller.complete(controller);
 
     // Set map style

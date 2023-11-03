@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/presentation/pages/sun/bloc/sun_bloc.dart';
 import 'package:sunflower/feature/presentation/pages/sun/bloc/sun_state.dart';
 import 'package:sunflower/feature/presentation/widgets/progress_widget.dart';
@@ -20,8 +22,8 @@ class SunInfo extends StatelessWidget {
       var sunrise = "-";
       var sunset = "-";
       if (state is SunLoadedState) {
-        sunrise = state.sun.sunTimes.sunrise;
-        sunset = state.sun.sunTimes.sunset;
+        sunrise = _formatDateTime(state.sun.sunTimes.sunrise);
+        sunset = _formatDateTime(state.sun.sunTimes.sunset);
       }
       return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Column(
@@ -40,5 +42,14 @@ class SunInfo extends StatelessWidget {
         ),
       ]);
     });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    if (dateTime.year <= year) {
+      return '-- : -- : --';
+    }
+    final timeZoneOffset = DateTime.now().timeZoneOffset;
+    final dateTimeOffset = dateTime.add(timeZoneOffset);
+    return DateFormat('HH : mm : ss').format(dateTimeOffset);
   }
 }

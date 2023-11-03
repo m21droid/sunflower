@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sunflower/core/ext/pair.dart';
 import 'package:sunflower/core/res/colors.dart';
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/all_plants_tab.dart';
 import 'package:sunflower/feature/presentation/pages/garden/widgets/my_plants_tab.dart';
 import 'package:sunflower/feature/presentation/pages/map/map_page.dart';
+import 'package:sunflower/feature/presentation/pages/sun/sun_page.dart';
 import 'package:sunflower/feature/presentation/widgets/floating_action_button_widget.dart';
+import 'package:sunflower/feature/presentation/widgets/toast_widget.dart';
 
 class GardenPage extends StatefulWidget {
   static const routeName = '/garden';
@@ -47,11 +54,9 @@ class _GardenPageState extends State<GardenPage>
         shadowColor: AppColors.dark,
         actions: [
           IconButton(
-            icon: const Icon(Icons.sunny, color: AppColors.secondary),
-            tooltip: 'Time of Sunrise and Sunset',
-            onPressed: () {
-              Navigator.pushNamed(context, MapPage.routeName);
-            },
+            icon: const Icon(Icons.search, color: AppColors.secondary),
+            tooltip: 'Search for a plant',
+            onPressed: () {},
           ),
         ],
         bottom: TabBar(
@@ -76,9 +81,7 @@ class _GardenPageState extends State<GardenPage>
       ),
       floatingActionButton: AppFloatingActionButton(
         Icons.sunny,
-        onPressed: () {
-          Navigator.pushNamed(context, MapPage.routeName);
-        },
+        onPressed: _onPressedSun,
       ),
       backgroundColor: AppColors.background,
     );
@@ -95,4 +98,31 @@ class _GardenPageState extends State<GardenPage>
               : AppColors.darkColorFilter,
         ),
       );
+
+  _onPressedSun() {
+    if (Platform.isAndroid) {
+      const channel = MethodChannel('geo_api_key');
+      channel.invokeMethod<String>('requestGeoApiKey').then(
+        (value) {
+          if (value != null && value.isNotEmpty) {
+            Navigator.pushNamed(context, MapPage.routeName);
+          } else {
+            _startSunPage();
+          }
+        },
+        onError: (error) {
+          _startSunPage();
+        },
+      );
+    } else {
+      _startSunPage();
+    }
+  }
+
+  _startSunPage() {
+    Navigator.pushNamed(context, SunPage.routeName,
+        arguments: Pair(latLng, DateTime.now()));
+    context.showToast(
+        'To display the map you need to add your API_KEY for GoogleMaps.');
+  }
 }

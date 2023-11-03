@@ -1,3 +1,4 @@
+import 'package:sunflower/core/temp.dart';
 import 'package:sunflower/feature/data/datasources/local/dto/plant_dto.dart';
 import 'package:sunflower/feature/data/datasources/remote/models/plant_model.dart';
 import 'package:sunflower/feature/data/datasources/weather/models/sun_times_model.dart';
@@ -30,6 +31,8 @@ extension AppPlantModel on PlantModel {
 
 extension AppSunTimesModel on SunTimesModel {
   SunTimesEntity toEntity() {
-    return SunTimesEntity(sunrise: sunrise, sunset: sunset);
+    return SunTimesEntity(
+        sunrise: DateTime.tryParse(sunrise) ?? DateTime(year),
+        sunset: DateTime.tryParse(sunset) ?? DateTime(year));
   }
 }

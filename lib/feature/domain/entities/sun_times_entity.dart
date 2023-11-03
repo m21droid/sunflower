@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class SunTimesEntity extends Equatable {
-  final String sunrise;
-  final String sunset;
+  final DateTime sunrise;
+  final DateTime sunset;
 
   const SunTimesEntity({
     required this.sunrise,

@@ -13,5 +13,6 @@ abstract class WeatherRestClient {
     @Query('lat') double lat,
     @Query('lng') double lng,
     @Query('date') String date,
+    @Query('formatted') int formatted,
   );
 }

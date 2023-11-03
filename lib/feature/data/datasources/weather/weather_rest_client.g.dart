@@ -25,12 +25,14 @@ class _WeatherRestClient implements WeatherRestClient {
     double lat,
     double lng,
     String date,
+    int formatted,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'lat': lat,
       r'lng': lng,
       r'date': date,
+      r'formatted': formatted,
     };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
